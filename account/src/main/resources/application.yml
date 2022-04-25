@@ -1,4 +1,42 @@
+server:
+  servlet:
+    context-path: /
+  port: 9080
+  compression:
+    mime-types:
+      - application/json
+
 client:
   user:
     searcher:
-      http://localhost:9080/api/users/search?cpf={cpf}
+    http://localhost:9081/api/users/search?cpf={cpf}
+    validator:
+    http://localhost:9081/api/users/validator/{id}
+    creator:
+    http://localhost:9081/api/users
+
+spring:
+  application:
+    name: account
+  # Config to connect to H2 database
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 1234
+  # Target database to operate on
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        ddl-auto: update
+  h2:
+    console:
+      enabled: true
+      # default path: h2-console
+      path: /h2-ui
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+

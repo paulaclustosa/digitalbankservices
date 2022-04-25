@@ -45,8 +45,11 @@ public class Account {
   private Integer userId;
 
   @Builder
-  public Account(String password) {
+  public Account(Integer branchNumber, Integer number, String password, Integer userId) {
+    this.branchNumber = branchNumber;
+    this.number = number;
     this.password = password;
     this.balance = new BigDecimal(0);
+    this.userId = userId;
   }
 }

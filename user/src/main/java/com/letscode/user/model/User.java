@@ -25,14 +25,14 @@ public class User {
   private String lastName;
 
   @Column(name = "login_password")
-  private String password;
+  private String loginPassword;
 
   @Builder
-  public User(String cpf, String firstName, String lastName, String password) {
+  public User(String cpf, String firstName, String lastName, String loginPassword) {
     this.cpf = cpf;
     this.firstName = firstName;
     this.lastName = lastName;
-    this.password = password;
+    this.loginPassword = loginPassword;
   }
 
 }
