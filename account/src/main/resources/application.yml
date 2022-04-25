@@ -1,0 +1,4 @@
+client:
+  user:
+    searcher:
+      http://localhost:9080/api/users/search?cpf={cpf}
