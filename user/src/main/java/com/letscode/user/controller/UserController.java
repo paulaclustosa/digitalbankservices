@@ -4,8 +4,7 @@ import com.letscode.user.dto.*;
 import com.letscode.user.model.User;
 import com.letscode.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -30,7 +29,6 @@ public class UserController {
     User user = userService.createUser(request);
     URI uri = uriComponentsBuilder.path("/api/users/{id}").buildAndExpand(user.getId()).toUri();
     return ResponseEntity.created(uri).body(CreateUserMapper.toCreateUserResponse(user));
-
   }
 
   @GetMapping("/search")

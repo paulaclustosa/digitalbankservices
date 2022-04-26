@@ -3,6 +3,7 @@ package com.letscode.user.dto;
 import lombok.Builder;
 
 public class CreateUserResponse {
+
   private Integer id;
   private String cpf;
   private String fullName;

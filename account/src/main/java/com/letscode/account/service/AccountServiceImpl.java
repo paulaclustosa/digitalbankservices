@@ -46,7 +46,7 @@ public class AccountServiceImpl implements AccountService {
               .loginPassword(passwordEncoder.encode(request.getLoginPassword().toString()))
               .build();
 
-      // Check if the person entered its correct bank login information (cpf and login password)
+      // Check if the person entered its correct bank information (cpf and login password)
       ValidateUserCredentialsResponse validateUserCredentialsResponse =
           validateUserCredentialsClient.validateUser(userId, validateUserCredentialsRequest);
 

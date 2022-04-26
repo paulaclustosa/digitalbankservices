@@ -13,6 +13,6 @@ public class AccountPasswordValidator implements ConstraintValidator<AccountPass
 
   @Override
   public boolean isValid(Integer value, ConstraintValidatorContext constraintValidatorContext) {
-    return Integer.toString(value).length() == 6;
+    return Integer.toString(value).length() == 4;
   }
 }

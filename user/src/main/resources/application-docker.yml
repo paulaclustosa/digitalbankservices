@@ -1,11 +1,11 @@
 #server:
-#  port: 9080
+#  port: 9081
 #
 #spring:
 #  application:
-#    name: account
+#    name: user
 #  datasource:
-#    url: jdbc:postgresql://localhost:5432/account
+#    url: jdbc:postgresql://postgres:5432/user
 #    username: paulaletscode
 #    password: password
 #  jpa:
@@ -16,6 +16,3 @@
 #        dialect: org.hibernate.dialect.PostgreSQLDialect
 #        format_sql: true
 #    show-sql: true
-
-
-
