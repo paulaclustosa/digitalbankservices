@@ -1,7 +1,7 @@
 services:
   postgres:
     container_name: postgres
-    image: postgres:14.1-alpine
+    image: postgres
     environment:
       POSTGRES_USER: paulaletscode
       POSTGRES_PASSWORD: password
@@ -20,7 +20,7 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-      PGADMIN_CONFIG_SERVER_MODE: 'false'
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
     volumes:
       - pgadmin:/var/lib/pgadmin
     ports:
@@ -29,37 +29,9 @@ services:
       - postgres
     restart: unless-stopped
 
-    #  account:
-    #    container_name: account
-    #    image: digitalbankservices/account:latest
-    #    environment:
-    #      - SPRING_PROFILES_ACTIVE=docker
-    #    ports:
-    #      - "9080:9080"
-    #    networks:
-    #      - spring
-    #      - postgres
-    #    depends_on:
-    #      - postgres
-
-    #  user:
-    #    container_name: user
-    #    image: digitalbankservices/user:latest
-    #    environment:
-    #      - SPRING_PROFILES_ACTIVE=docker
-    #    ports:
-    #      - "9081:9081"
-    #    networks:
-    #      - spring
-    #      - postgres
-    #    depends_on:
-    #      - postgres
-
 networks:
   postgres:
     driver: bridge
-    #  spring:
-    #    driver: bridge
 
 volumes:
   postgres:

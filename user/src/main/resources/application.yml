@@ -1,18 +1,18 @@
-#server:
-#  port: 9081
-#
-#spring:
-#  application:
-#    name: user
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/user
-#    username: paulaletscode
-#    password: password
-#  jpa:
-#    hibernate:
-#      ddl-auto: create-drop
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.PostgreSQLDialect
-#        format_sql: true
-#    show-sql: true
+server:
+  port: 9081
+
+spring:
+  application:
+    name: user
+  datasource:
+    url: jdbc:postgresql://localhost:5432/user
+    username: paulaletscode
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true

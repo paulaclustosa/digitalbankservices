@@ -2,20 +2,13 @@ package com.letscode.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@SpringBootApplication
-@EnableWebSecurity
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+@EnableJpaAuditing
 public class UserApplication {
   public static void main(String[] args) {
     SpringApplication.run(UserApplication.class, args);
-  }
-
-  @Bean
-  public PasswordEncoder bCryptPasswordEncoder() {
-    return new BCryptPasswordEncoder();
   }
 }

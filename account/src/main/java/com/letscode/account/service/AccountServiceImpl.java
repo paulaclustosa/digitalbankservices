@@ -35,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
   @Override
   public Account createAccount(CreateAccountRequest request) {
     // Check if the person is already a user from this bank
-    SearchUserResponse searchUserResponse = searchUserClient.searchUser(request.getCpf());
+    SearchUserResponse searchUserResponse = searchUserClient.execute(request);
 
     if (searchUserResponse.getIsUser()) {
       // isUser = true
@@ -47,10 +47,10 @@ public class AccountServiceImpl implements AccountService {
               .build();
 
       // Check if the person entered its correct bank information (cpf and login password)
-      ValidateUserCredentialsResponse validateUserCredentialsResponse =
-          validateUserCredentialsClient.validateUser(userId, validateUserCredentialsRequest);
+      ValidateUserCredentialsResponse validationResponse =
+          validateUserCredentialsClient.execute(userId, validateUserCredentialsRequest);
 
-      if (validateUserCredentialsResponse.getIsValid()) {
+      if (validationResponse.getIsValid()) {
         // validCredentials = true
         // Create a new account
         Account newAccount = generateAccount(request, searchUserResponse.getUserId());
@@ -68,7 +68,7 @@ public class AccountServiceImpl implements AccountService {
           .lastName(request.getLastName())
           .loginPassword(request.getLoginPassword())
           .build();
-      CreateUserResponse createUserResponse = createUserClient.createUser(createUserRequest);
+      CreateUserResponse createUserResponse = createUserClient.execute(createUserRequest);
 
       // Then create a new account
       Account newAccount = generateAccount(request, createUserResponse.getUserId());

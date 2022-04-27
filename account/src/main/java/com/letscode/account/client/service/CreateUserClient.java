@@ -10,19 +10,11 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class CreateUserClient {
 
-  public CreateUserResponse createUser(CreateUserRequest request) {
+  public CreateUserResponse execute(CreateUserRequest request) {
     try {
       String url = "http://localhost:9081/api/users";
       RestTemplate restTemplate = new RestTemplate();
-      HttpHeaders header = new HttpHeaders();
-      header.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-      HttpEntity<CreateUserRequest> entity = new HttpEntity<>(request, header);
-      ResponseEntity<CreateUserResponse> response = restTemplate.exchange(
-          url,
-          HttpMethod.GET,
-          entity,
-          CreateUserResponse.class
-      );
+      ResponseEntity<CreateUserResponse> response = restTemplate.postForEntity(url, request, CreateUserResponse.class);
       return response.getBody();
     } catch (RestClientException clientException) {
       clientException.printStackTrace();
