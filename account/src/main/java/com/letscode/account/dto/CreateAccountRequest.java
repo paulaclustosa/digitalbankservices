@@ -3,10 +3,12 @@ package com.letscode.account.dto;
 import com.letscode.account.annotation.AccountPassword;
 import com.letscode.account.annotation.LoginPassword;
 import lombok.Getter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.NotBlank;
 
+@ToString
 @Getter
 public class CreateAccountRequest {
   @CPF

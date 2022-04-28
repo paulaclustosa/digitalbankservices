@@ -12,5 +12,5 @@ public class CreateAccountResponse {
   private BigDecimal balance;
   private String createdAt;
   private String updatedAt;
-  private Integer userId;
+  private Integer customerId;
 }

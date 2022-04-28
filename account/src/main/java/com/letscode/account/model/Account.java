@@ -41,15 +41,15 @@ public class Account {
   @LastModifiedDate
   private LocalDateTime updatedAt;
 
-  @Column(name = "user_id")
-  private Integer userId;
+  @Column(name = "customer_id")
+  private Integer customerId;
 
   @Builder
-  public Account(Integer branchNumber, Integer number, String password, Integer userId) {
+  public Account(Integer branchNumber, Integer number, String password, Integer customerId) {
     this.branchNumber = branchNumber;
     this.number = number;
     this.password = password;
     this.balance = new BigDecimal(0);
-    this.userId = userId;
+    this.customerId = customerId;
   }
 }

@@ -18,7 +18,7 @@ public class CreateAccountMapper {
         .balance(account.getBalance())
         .createdAt(account.getCreatedAt().format(formatter))
         .updatedAt(account.getUpdatedAt().format(formatter))
-        .userId(account.getUserId())
+        .customerId(account.getCustomerId())
         .build();
   }
 

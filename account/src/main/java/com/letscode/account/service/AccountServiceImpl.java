@@ -5,84 +5,68 @@ import com.letscode.account.dto.CreateAccountRequest;
 import com.letscode.account.model.Account;
 import com.letscode.account.repository.AccountRepository;
 import com.letscode.account.client.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
+@Slf4j
 @Service
 public class AccountServiceImpl implements AccountService {
 
-  final SearchUserClient searchUserClient;
-  final ValidateUserCredentialsClient validateUserCredentialsClient;
-  final CreateUserClient createUserClient;
-  final PasswordEncoder passwordEncoder;
-  final AccountRepository accountRepository;
+  final SearchCustomerClient searchCustomerClient;
+  final VerifyCustomerCredentialsClient verifyCustomerCredentialsClient;
+  final CreateCustomerClient createCustomerClient;
+  final PasswordEncoder encoder;
+  final AccountRepository repository;
 
 
   @Autowired
-  public AccountServiceImpl(SearchUserClient searchUserClient, ValidateUserCredentialsClient validateUserCredentialsClient,
-                            CreateUserClient createUserClient,
-                            PasswordEncoder passwordEncoder, AccountRepository accountRepository) {
-    this.searchUserClient = searchUserClient;
-    this.validateUserCredentialsClient = validateUserCredentialsClient;
-    this.createUserClient = createUserClient;
-    this.passwordEncoder = passwordEncoder;
-    this.accountRepository = accountRepository;
+  public AccountServiceImpl(SearchCustomerClient searchCustomerClient, VerifyCustomerCredentialsClient verifyCustomerCredentialsClient,
+                            CreateCustomerClient createCustomerClient,
+                            PasswordEncoder encoder, AccountRepository repository) {
+    this.searchCustomerClient = searchCustomerClient;
+    this.verifyCustomerCredentialsClient = verifyCustomerCredentialsClient;
+    this.createCustomerClient = createCustomerClient;
+    this.encoder = encoder;
+    this.repository = repository;
   }
 
   @Override
-  public Account createAccount(CreateAccountRequest request) {
-    // Check if the person is already a user from this bank
-    SearchUserResponse searchUserResponse = searchUserClient.execute(request);
+  public Account handleCreation(CreateAccountRequest request) throws IllegalAccessException {
+    SearchCustomerResponse searchCustomerResponse = searchCustomerClient.execute(request);
 
-    if (searchUserResponse.getIsUser()) {
-      // isUser = true
-      Integer userId = searchUserResponse.getUserId();
-      ValidateUserCredentialsRequest validateUserCredentialsRequest =
-          ValidateUserCredentialsRequest.builder()
-              .cpf(request.getCpf())
-              .loginPassword(passwordEncoder.encode(request.getLoginPassword().toString()))
-              .build();
-
-      // Check if the person entered its correct bank information (cpf and login password)
-      ValidateUserCredentialsResponse validationResponse =
-          validateUserCredentialsClient.execute(userId, validateUserCredentialsRequest);
-
-      if (validationResponse.getIsValid()) {
-        // validCredentials = true
-        // Create a new account
-        Account newAccount = generateAccount(request, searchUserResponse.getUserId());
-        return accountRepository.save(newAccount);
+    if (searchCustomerResponse.getIsCustomer()) {
+      if (verifyCustomerCredentialsClient.execute(request).getIsValid()) {
+        Account account = create(request, searchCustomerResponse.getCustomerId());
+        return repository.save(account);
       } else {
-        // validCredentials = false
-        return null;
+        throw new IllegalAccessException();
       }
     } else {
-      // isUser = false
-      // First create a new user
-      CreateUserRequest createUserRequest = CreateUserRequest.builder()
+      CreateCustomerRequest createCustomerRequest = CreateCustomerRequest.builder()
           .cpf(request.getCpf())
           .firstName(request.getFirstName())
           .lastName(request.getLastName())
           .loginPassword(request.getLoginPassword())
           .build();
-      CreateUserResponse createUserResponse = createUserClient.execute(createUserRequest);
-
-      // Then create a new account
-      Account newAccount = generateAccount(request, createUserResponse.getUserId());
-      return accountRepository.save(newAccount);
+      CreateCustomerResponse createCustomerResponse = createCustomerClient.execute(createCustomerRequest);
+      Account account = create(request, createCustomerResponse.getCustomerId());
+      return repository.save(account);
     }
   }
 
-  private Account generateAccount(CreateAccountRequest request, Integer id) {
+  @Override
+  public Account create(CreateAccountRequest request, Integer customerId) {
     return Account.builder()
         .branchNumber(request.getBranchNumber())
         .number(new Random(99999).nextInt())
-        .password(passwordEncoder.encode(request.getLoginPassword().toString()))
-        .userId(id)
+        .password(encoder.encode(request.getLoginPassword().toString()))
+        .customerId(customerId)
         .build();
   }
+
 
 }
